@@ -4,7 +4,16 @@
 use std::thread;
 
 pub fn sum(slice: &'static [i32]) -> i32 {
-    todo!()
+    let mid = slice.len() / 2;
+    let (left_half, right_half) = slice.split_at(mid);
+
+    let left_thread = thread::spawn(|| left_half.iter().sum::<i32>());
+    let right_thread = thread::spawn(|| right_half.iter().sum::<i32>());
+
+    let left_sum = left_thread.join().unwrap();
+    let right_sum = right_thread.join().unwrap();
+
+    left_sum + right_sum
 }
 
 #[cfg(test)]
